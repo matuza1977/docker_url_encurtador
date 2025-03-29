@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encurtador de URLs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 2rem;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .url-list {
+            margin-top: 2rem;
+        }
+        .url-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .short-url {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+        .short-url:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card p-4">
+            <h1 class="text-center mb-4">Encurtador de URLs</h1>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('shorten_url') }}" method="POST" class="mb-4">
+                <div class="input-group">
+                    <input type="url" name="url" class="form-control" placeholder="Cole sua URL aqui" required>
+                    <button type="submit" class="btn btn-primary">Encurtar</button>
+                </div>
+            </form>
+
+            <div class="url-list">
+                <h2 class="mb-3">URLs Encurtadas</h2>
+                {% if urls %}
+                    {% for url in urls %}
+                        <div class="url-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Original:</strong> {{ url.original_url }}</p>
+                                    <p class="mb-1">
+                                        <strong>Encurtada:</strong>
+                                        <a href="{{ url_for('redirect_to_url', short_code=url.short_code) }}" class="short-url">
+                                            {{ request.host_url }}{{ url.short_code }}
+                                        </a>
+                                    </p>
+                                    <small class="text-muted">
+                                        Criada em: {{ url.created_at.strftime('%d/%m/%Y %H:%M') }} | 
+                                        Cliques: {{ url.clicks }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-muted">Nenhuma URL encurtada ainda.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
