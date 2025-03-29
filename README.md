@@ -38,4 +38,9 @@ docker_demo/
 - Para reconstruir os containers:
   ```bash
   docker-compose up --build
-  ``` 
+  ```
+
+  ![image](https://github.com/user-attachments/assets/265f05d7-8ab1-4c14-9eeb-8049398b9235)
+
+  ![image](https://github.com/user-attachments/assets/11973464-3dec-4278-86ab-4323d1ca5c20)
+
